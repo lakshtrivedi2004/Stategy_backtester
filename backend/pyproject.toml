@@ -1,0 +1,12 @@
+[project]
+name = "backtester"
+version = "1.0.0"
+description = "Backtest Python or Pine Script strategies on Forex, Crypto or Indian markets"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "tests"]
+
+[tool.ruff]
+line-length = 120

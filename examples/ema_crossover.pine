@@ -1,0 +1,25 @@
+//@version=5
+strategy("EMA Crossover with ATR stop", overlay=true, initial_capital=10000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=100)
+
+fastLen = input.int(9, "Fast EMA")
+slowLen = input.int(21, "Slow EMA")
+atrMult = input.float(2.0, "ATR stop multiple")
+
+fast = ta.ema(close, fastLen)
+slow = ta.ema(close, slowLen)
+atr = ta.atr(14)
+
+plot(fast, color=color.teal)
+plot(slow, color=color.orange)
+
+if ta.crossover(fast, slow)
+    strategy.entry("Long", strategy.long)
+if ta.crossunder(fast, slow)
+    strategy.entry("Short", strategy.short)
+
+// protective stop at a multiple of ATR from the entry price
+if strategy.position_size > 0
+    strategy.exit("Long stop", "Long", stop=strategy.position_avg_price - atrMult * atr)
+if strategy.position_size < 0
+    strategy.exit("Short stop", "Short", stop=strategy.position_avg_price + atrMult * atr)
